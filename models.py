@@ -1,4 +1,4 @@
-from library_management_system.storage import Storage
+from storage import Storage
 
 
 class LibraryDatabase:

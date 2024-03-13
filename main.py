@@ -1,6 +1,6 @@
-import library_management_system.book as book
-import library_management_system.check as check
-import library_management_system.user as user
+import book
+import check
+import user
 
 
 class InputManager:

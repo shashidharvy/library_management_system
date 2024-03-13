@@ -1,4 +1,4 @@
-from library_management_system.models import LibraryDatabase
+from models import LibraryDatabase
 
 
 class User:
