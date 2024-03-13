@@ -1,4 +1,8 @@
+import logging
+
 from models import LibraryDatabase
+
+logger = logging.getLogger(__name__)
 
 
 class User:
@@ -17,14 +21,23 @@ class UserManagement(LibraryDatabase):
         :param user: user object from User class to add to database
         :return:
         """
-        self.add_user_info(user)
+        try:
+            self.add_user_info(user)
+            logger.info(f"{user} added to database")
+        except Exception as e:
+            logger.error(e)
+            print(e)
 
     def list_users(self):
         """
         This function list the users in the database
         :return: list of usernames
         """
-        self.list_user_info()
+        try:
+            self.list_user_info()
+        except Exception as e:
+            logger.error(e)
+            print(e)
 
     def update_user(self, user):
         """
@@ -32,7 +45,11 @@ class UserManagement(LibraryDatabase):
         :param user:
         :return:
         """
-        return self.update_user_info(user)
+        try:
+            self.update_user_info(user)
+            logger.info(f"updated {user}")
+        except Exception as e:
+            print(e)
 
     def delete_user(self, user_id):
         """
@@ -40,4 +57,9 @@ class UserManagement(LibraryDatabase):
         :param user_id:
         :return:
         """
-        self.delete_user_info(user_id)
+        try:
+            self.delete_user_info(user_id)
+            logger.info(f"deleted {user_id}")
+        except Exception as e:
+            logger.error(e)
+            print(e)

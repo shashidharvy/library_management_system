@@ -1,4 +1,8 @@
+import logging
+
 from models import LibraryDatabase
+
+logger = logging.getLogger(__name__)
 
 
 class Book:
@@ -18,14 +22,22 @@ class BookManagement(LibraryDatabase):
         :param book: book object from the Book class to add to the inventory
         :return:
         """
-        self.add_to_inventory(book)
+        try:
+            self.add_to_inventory(book)
+            logger.info(f"Added {book}")
+        except Exception as e:
+            logger.error(e)
+            print(e)
 
     def list_books(self):
         """
         This function returns a list of the books in the inventory
         :return: list of books
         """
-        self.list_inventory()
+        try:
+            self.list_inventory()
+        except Exception as e:
+            print(e)
 
     def delete_book(self, isbn):
         """
@@ -33,7 +45,12 @@ class BookManagement(LibraryDatabase):
         :param isbn:
         :return: list of books
         """
-        self.delete_from_inventory(isbn)
+        try:
+            self.delete_from_inventory(isbn)
+            logger.info(f"Removed book with {isbn}")
+        except Exception as e:
+            logger.error(e)
+            print(e)
 
     def update_book(self, book):
         """
@@ -41,4 +58,9 @@ class BookManagement(LibraryDatabase):
         :param book: book object from the Book class to update the inventory
         :return:
         """
-        self.update_inventory(book)
+        try:
+            self.update_inventory(book)
+            logger.info(f"Updated {book}")
+        except Exception as e:
+            logger.error(e)
+            print(e)

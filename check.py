@@ -1,4 +1,8 @@
+import logging
+
 from models import LibraryDatabase
+
+logger = logging.getLogger(__name__)
 
 
 class CheckinManagement(LibraryDatabase):
@@ -9,7 +13,12 @@ class CheckinManagement(LibraryDatabase):
         :return:
         """
         user_id, isbn = checkin_details
-        self.book_checkout(user_id, isbn)
+        try:
+            self.book_checkout(user_id, isbn)
+            logger.info(f"User {user_id} checked out book {isbn}")
+        except Exception as e:
+            logger.error(e)
+            print(e)
 
     def ckeck_in(self, checkin_details):
         """
@@ -18,7 +27,12 @@ class CheckinManagement(LibraryDatabase):
         :return:
         """
         user_id, isbn = checkin_details
-        self.book_checkin(user_id, isbn)
+        try:
+            self.book_checkin(user_id, isbn)
+            logger.info(f"User {user_id} checked in book {isbn}")
+        except Exception as e:
+            logger.error(e)
+            print(e)
 
     def check_availability(self, isbn):
         """
@@ -26,6 +40,8 @@ class CheckinManagement(LibraryDatabase):
         :param isbn:
         :return:
         """
-        return self.checkout_availability(isbn)
-
-
+        try:
+            return self.checkout_availability(isbn)
+        except Exception as e:
+            logger.error(e)
+            print(e)

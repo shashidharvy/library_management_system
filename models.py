@@ -1,8 +1,4 @@
-import logging
-
 from storage import Storage
-
-logger = logging.getLogger(__name__)
 
 
 class LibraryDatabase:
@@ -30,17 +26,14 @@ class LibraryDatabase:
         print(self._checkout_info)
         availability_status = self._checkout_info.get(isbn)
         if not availability_status:
-            logger.error(f"Specified {isbn} is not available")
             raise ValueError(f"Specified {isbn} is not available")
         if availability_status and availability_status['checked_out']:
-            logger.error(f"Specified {isbn} is already checkedout")
             raise ValueError(f"Specified {isbn} is already checkedout")
         self._checkout_info[isbn] = {
             'user_id': userid,
             'checked_out': True
         }
         self._storage.to_json(self._checkout_info, 'checkout_storage')
-        logger.info(f"Checked out {isbn}")
         print(f"Checked out {isbn}")
 
     def book_checkin(self, userid, isbn):
@@ -52,14 +45,12 @@ class LibraryDatabase:
         """
         availability_status = self._checkout_info.get(isbn)
         if availability_status and (not availability_status['checked_out'] or availability_status['user_id'] != userid):
-            logger.error(f"Specified {isbn} is either not checkedout or provided userid is wrong")
             raise ValueError(f"Specified {isbn} is either not checkedout or provided userid is wrong")
         self._checkout_info[isbn] = {
             'user_id': None,
             'checked_out': False
         }
         self._storage.to_json(self._checkout_info, 'checkout_storage')
-        logger.info(f"Checked in {isbn}")
         print(f"Checked in {isbn}")
 
     def checkout_availability(self, isbn):
@@ -70,7 +61,6 @@ class LibraryDatabase:
         """
         availability = self._checkout_info.get(isbn)
         if not availability:
-            logger.error(f"Specified {isbn} is not available")
             raise ValueError(f"Specified {isbn} is not available")
         print("available" if not availability['checked_out'] else "not available")
 
@@ -81,13 +71,11 @@ class LibraryDatabase:
         :return:
         """
         if self._inventory_info.get(book.isbn):
-            logger.error(f"Book with isbn {book.isbn} already exists")
             raise ValueError(f"Book with isbn {book.isbn} already exists")
         self._inventory_info[book.isbn] = {"title": book.title, "author": book.author}
         self._storage.to_json(self._inventory_info, 'inventory_storage')
         self._checkout_info[book.isbn] = {'user_id': None, 'checked_out': False}
         self._storage.to_json(self._checkout_info, 'checkout_storage')
-        logger.info(f"Added {book}")
         print(f"Added {book}")
 
     def list_inventory(self):
@@ -106,11 +94,9 @@ class LibraryDatabase:
         :return: list of books
         """
         if not self._inventory_info.get(isbn):
-            logger.error(f"Book with isbn {isbn} does not exist")
             raise ValueError(f"Book with isbn {isbn} does not exist")
         self._inventory_info.pop(isbn)
         self._storage.to_json(self._inventory_info, 'inventory_storage')
-        logger.info(f"Removed book with {isbn}")
         print(f"Removed book with {isbn}")
 
     def update_inventory(self, book):
@@ -120,11 +106,9 @@ class LibraryDatabase:
         :return:
         """
         if not self._inventory_info.get(book.isbn):
-            logger.error(f"Book with isbn {book.isbn} does not exist")
             raise ValueError(f"Book with isbn {book.isbn} does not exist")
         self._inventory_info[book.isbn] = {"title": book.title, "author": book.author}
         self._storage.to_json(self._inventory_info, 'inventory_storage')
-        logger.info(f"Updated {book}")
         print(f"Updated {book}")
 
     def add_user_info(self, user):
@@ -134,11 +118,9 @@ class LibraryDatabase:
         :return:
         """
         if self._user_info.get(user.user_id):
-            logger.error(f"User already exists for {user.user_id}")
             raise ValueError(f"User already exists for {user.user_id}")
         self._user_info[user.user_id] = user.username
         self._storage.to_json(self._user_info, 'user_storage')
-        logger.info(f'Added {user}')
         print(f'Added {user}')
 
     def list_user_info(self):
@@ -158,11 +140,9 @@ class LibraryDatabase:
         :return:
         """
         if not self._user_info.get(user.user_id):
-            logger.error(f"User does not exists for {user.user_id}")
             raise ValueError(f"User does not exists for {user.user_id}")
         self._user_info[user.user_id] = user.username
         self._storage.to_json(self._user_info, 'user_storage')
-        logger.info(f'Updated {user}')
         print(f'Updated {user}')
 
     def delete_user_info(self, user_id):
@@ -172,9 +152,7 @@ class LibraryDatabase:
         :return:
         """
         if not self._user_info.get(user_id):
-            logger.error(f"User does not exists for {user_id}")
             raise ValueError(f"User does not exist for {user_id}")
         self._user_info.pop(user_id)
         self._storage.to_json(self._user_info, 'user_storage')
-        logger.info(f'Deleted {user_id}')
         print(f'Deleted {user_id}')
