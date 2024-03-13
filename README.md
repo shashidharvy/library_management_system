@@ -27,13 +27,13 @@ To run the Library Management System:
 2. Clone the repository to your local machine:
 
    ```bash
-   git clone https://github.com/your-username/library-management-system.git
+   git clone https://github.com/shashidharvy/library_management_system.git
    ```
 
 3. Navigate to the project directory:
 
    ```bash
-   cd library-management-system
+   cd library_management_system
    ```
 
 4. Run the main.py file:
