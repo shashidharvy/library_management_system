@@ -91,9 +91,10 @@ class InputManager:
             if len(title) == 0:
                 print("Please pass valid title")
                 continue
-            elif len(author) == 0:
+            if len(author) == 0:
                 print("Please pass valid author")
-            elif len(isbn) != 13:
+                continue
+            if len(isbn) != 13:
                 print("Please pass valid ISBN of length 13")
                 continue
             break
@@ -115,7 +116,13 @@ class InputManager:
 
     @staticmethod
     def get_user_id():
-        return input("Enter user ID: ")
+        while True:
+            user_id = input("Enter user ID: ")
+            if len(user_id) == 0:
+                print("Please pass valid user ID")
+                continue
+            break
+        return user_id
 
     @staticmethod
     def get_isbn():
@@ -128,8 +135,16 @@ class InputManager:
         return isbn
 
     def get_chckout_info(self):
-        user_id = input(self._input_prompts[3]["user_id"])
-        isbn = input(self._input_prompts[3]["isbn"])
+        while True:
+            user_id = input(self._input_prompts[3]["user_id"])
+            isbn = input(self._input_prompts[3]["isbn"])
+            if len(user_id) == 0:
+                print("Please pass valid user ID")
+                continue
+            if len(isbn) != 13:
+                print("Please pass valid ISBN of length 13")
+                continue
+            break
         return user_id, isbn
 
     def get_users_choice(self):
