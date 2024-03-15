@@ -1,20 +1,11 @@
 import logging
 
-from models import LibraryDatabase
+from models import Models
 
 logger = logging.getLogger(__name__)
 
 
-class User:
-    def __init__(self, username, user_id):
-        self.username = username
-        self.user_id = user_id
-
-    def __str__(self):
-        return f"User (username={self.username}, user_id={self.user_id})"
-
-
-class UserManagement(LibraryDatabase):
+class Users(Models):
     def add_user(self, user):
         """
         This function adds a user to the database.
@@ -22,8 +13,9 @@ class UserManagement(LibraryDatabase):
         :return:
         """
         try:
-            self.add_user_info(user)
+            self.create(storage_key='users', input_data=user)
             logger.info(f"{user} added to database")
+            print(f"{user} added")
         except Exception as e:
             logger.error(e)
             print(e)
@@ -34,7 +26,7 @@ class UserManagement(LibraryDatabase):
         :return: list of usernames
         """
         try:
-            self.list_user_info()
+            self.list_data(storage_key='users')
         except Exception as e:
             logger.error(e)
             print(e)
@@ -46,8 +38,9 @@ class UserManagement(LibraryDatabase):
         :return:
         """
         try:
-            self.update_user_info(user)
+            self.update(storage_key='users', update_data=user)
             logger.info(f"updated {user}")
+            print(f"updated {user}")
         except Exception as e:
             print(e)
 
@@ -58,8 +51,9 @@ class UserManagement(LibraryDatabase):
         :return:
         """
         try:
-            self.delete_user_info(user_id)
+            self.delete(storage_key='users', delete_keyword=user_id)
             logger.info(f"deleted {user_id}")
+            print(f"deleted {user_id}")
         except Exception as e:
             logger.error(e)
             print(e)

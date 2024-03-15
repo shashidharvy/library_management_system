@@ -1,21 +1,11 @@
 import logging
 
-from models import LibraryDatabase
+from models import Models
 
 logger = logging.getLogger(__name__)
 
 
-class Book:
-    def __init__(self, isbn, title, author):
-        self.title = title
-        self.author = author
-        self.isbn = isbn
-
-    def __str__(self):
-        return f"Book (title={self.title}, author={self.author}, isbn={self.isbn})"
-
-
-class BookManagement(LibraryDatabase):
+class Books(Models):
     def add_book(self, book):
         """
         This function adds a book to the inventory
@@ -23,8 +13,15 @@ class BookManagement(LibraryDatabase):
         :return:
         """
         try:
-            self.add_to_inventory(book)
+            self.create(storage_key='books', input_data=book)
+            checkout_details = {
+                'isbn': book['isbn'],
+                'user_id': None,
+                'checked_out': False
+            }
+            self.create(storage_key='checkouts', input_data=checkout_details)
             logger.info(f"Added {book}")
+            print(f"{book} Book Added")
         except Exception as e:
             logger.error(e)
             print(e)
@@ -35,7 +32,7 @@ class BookManagement(LibraryDatabase):
         :return: list of books
         """
         try:
-            self.list_inventory()
+            self.list_data(storage_key='books')
         except Exception as e:
             print(e)
 
@@ -46,7 +43,9 @@ class BookManagement(LibraryDatabase):
         :return: list of books
         """
         try:
-            self.delete_from_inventory(isbn)
+            self.delete(storage_key='books', delete_keyword=isbn)
+            self.delete(storage_key='checkouts', delete_keyword=isbn)
+            print(f"Removed book with {isbn}")
             logger.info(f"Removed book with {isbn}")
         except Exception as e:
             logger.error(e)
@@ -59,7 +58,8 @@ class BookManagement(LibraryDatabase):
         :return:
         """
         try:
-            self.update_inventory(book)
+            self.update(storage_key='books', update_data=book)
+            print(f"Updated {book}")
             logger.info(f"Updated {book}")
         except Exception as e:
             logger.error(e)

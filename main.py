@@ -1,8 +1,8 @@
 import logging
 
-import book
-import check
-import user
+from book import Books
+from check import CheckinManager
+from user import Users
 
 logging.basicConfig(
     filename='library_events.log',
@@ -12,7 +12,7 @@ logging.basicConfig(
 )
 
 
-class InputManager:
+class Inputs:
     def __init__(self):
         self._input_prompts = {
             1: {
@@ -34,57 +34,57 @@ class InputManager:
             1: {
                 'job': 'ADD BOOK',
                 'method': self.get_book,
-                'action': book.BookManagement().add_book
+                'action': Books().add_book
             },
             2: {
                 'job': 'LIST BOOK',
-                'method': book.BookManagement().list_books,
+                'method': Books().list_books,
                 'action': None
             },
             3: {
                 'job': 'UPDATE BOOK',
                 'method': self.get_book,
-                'action': book.BookManagement().update_book
+                'action': Books().update_book
             },
             4: {
                 'job': 'DELETE BOOK',
                 'method': self.get_isbn,
-                'action': book.BookManagement().delete_book
+                'action': Books().delete_book
             },
             5: {
                 'job': 'ADD USER',
                 'method': self.get_user,
-                'action': user.UserManagement().add_user
+                'action': Users().add_user
             },
             6: {
                 'job': 'LIST USER',
-                'method': user.UserManagement().list_users,
+                'method': Users().list_users,
                 'action': None
             },
             7: {
                 'job': 'UPDATE USER',
                 'method': self.get_user,
-                'action': user.UserManagement().update_user
+                'action': Users().update_user
             },
             8: {
                 'job': 'DELETE USER',
                 'method': self.get_user_id,
-                'action': user.UserManagement().delete_user
+                'action': Users().delete_user
             },
             9: {
                 'job': 'CHECKOUT BOOK',
                 'method': self.get_chckout_info,
-                'action': check.CheckinManagement().ckeck_out
+                'action': CheckinManager().ckeckout
             },
             10: {
                 'job': 'CHECKIN BOOK',
                 'method': self.get_chckout_info,
-                'action': check.CheckinManagement().ckeck_in
+                'action': CheckinManager().ckeckin
             },
             11: {
                 'job': 'CHECKOUT AVAILABLE',
                 'method': self.get_isbn,
-                'action': check.CheckinManagement().checkout_availability
+                'action': CheckinManager().check_availability
             },
             12: {
                 'job': 'EXIT',
@@ -108,7 +108,7 @@ class InputManager:
                 continue
             break
 
-        return book.Book(isbn, title, author)
+        return {'isbn': isbn, 'title': title, 'author': author}
 
     def get_user(self):
         while True:
@@ -121,7 +121,7 @@ class InputManager:
                 print("Please pass valid user ID")
                 continue
             break
-        return user.User(username, user_id)
+        return {'username': username, 'user_id': user_id}
 
     @staticmethod
     def get_user_id():
@@ -154,7 +154,7 @@ class InputManager:
                 print("Please pass valid ISBN of length 13")
                 continue
             break
-        return user_id, isbn
+        return {'user_id': user_id, 'isbn': isbn}
 
     def get_users_choice(self):
         print("\nLibrary Management System")
@@ -175,11 +175,11 @@ class InputManager:
 
 if __name__ == "__main__":
     while True:
-        input_manager = InputManager()
-        user_input = input_manager.get_users_choice()
-        if input_manager.prompt_map[user_input]['method'] is not None:
-            input_details = input_manager.prompt_map[user_input]['method']()
-            if input_manager.prompt_map[user_input]['action']:
-                input_manager.prompt_map[user_input]['action'](input_details)
+        inputs = Inputs()
+        user_input = inputs.get_users_choice()
+        if inputs.prompt_map[user_input]['method'] is not None:
+            input_details = inputs.prompt_map[user_input]['method']()
+            if inputs.prompt_map[user_input]['action']:
+                inputs.prompt_map[user_input]['action'](input_details)
         else:
             break

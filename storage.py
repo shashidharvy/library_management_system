@@ -6,19 +6,19 @@ from pathlib import Path
 class Storage:
     def __init__(self):
         self._storage_paths = {
-            'user_storage':
+            'users':
                 {
-                    'json_path': os.path.join(Path.cwd(), 'user.json'),
+                    'json_path': os.path.join(Path.cwd(), 'users.json'),
                     'csv_path': 'user_csv.csv',
                 },
-            'inventory_storage':
+            'books':
                 {
-                    'json_path': os.path.join(Path.cwd(), 'inventory.json'),
+                    'json_path': os.path.join(Path.cwd(), 'books.json'),
                     'csv_path': 'inventory_csv.csv',
                 },
-            'checkout_storage':
+            'checkouts':
                 {
-                    'json_path': os.path.join(Path.cwd(), 'checkout.json'),
+                    'json_path': os.path.join(Path.cwd(), 'checkouts.json'),
                     'csv_path': 'checkout_csv.csv',
                 },
         }

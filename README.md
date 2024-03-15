@@ -14,7 +14,7 @@ The project consists of the following files:
 
 4. **user.py**: This file defines the `User` class, which represents library users. It includes functionalities related to adding users, listing users, deleting users, and updating user information.
 
-5. **models.py**: This file contains complex operations and logic for managing books, users, and their interactions. It provides an abstraction layer for performing operations on books and users.
+5. **models.py**: This file contains CRUD operations and logic for managing books, users, and their interactions. It provides an abstraction layer for performing operations on books and users.
 
 6. **storage.py**: This file provides functionality for storing data in different formats, such as JSON, CSV, or databases. It abstracts away the details of data storage and retrieval from the rest of the application.
 
