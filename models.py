@@ -45,24 +45,23 @@ class Models:
                     return json
 
     def update(self, storage_key, update_data):
-        information_found = self.search(storage_key, update_data)
+        validation_key = self.find_validation_key(update_data)
+        information_found = self.search(storage_key, update_data[validation_key])
         if information_found:
             update_index = self._storage_manager[storage_key].index(information_found)
             self._storage_manager[storage_key][update_index] = update_data
             self._storage.to_json(self._storage_manager[storage_key], storage_key)
         else:
-            raise ValueError(f"Specified {update_data} is not available")
+            raise ValueError(f"{update_data[validation_key]} is not available")
 
     def create(self, storage_key, input_data):
-        information_found = self.search(storage_key, input_data)
+        validation_key = self.find_validation_key(input_data)
+        information_found = self.search(storage_key, input_data[validation_key])
         if not information_found:
             self._storage_manager[storage_key].append(input_data)
             self._storage.to_json(self._storage_manager[storage_key], storage_key)
-        elif information_found and self.validate(information_found, input_data):
-            self._storage_manager[storage_key].append(input_data)
-            self._storage.to_json(self._storage_manager[storage_key], storage_key)
-        else:
-            raise ValueError(f"Specified {input_data} already exists")
+        elif information_found:
+            raise ValueError(f"{input_data[validation_key]} already exists")
 
     def delete(self, storage_key, delete_keyword):
         information_found = self.search(storage_key, delete_keyword)
@@ -76,10 +75,9 @@ class Models:
     def list_data(self, storage_key):
         print(self._storage_manager[storage_key])
 
-    def validate(self, input_information, validation_information):
+    def find_validation_key(self, input_information):
         for key in self._validation_keys:
-            if not validation_information.get(key):
+            if input_information.get(key):
+                return key
+            else:
                 continue
-            elif input_information.get(key) != validation_information.get(key):
-                return True
-            break
